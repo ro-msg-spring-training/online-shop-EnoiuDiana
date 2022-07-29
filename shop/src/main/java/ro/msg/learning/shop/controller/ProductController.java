@@ -30,9 +30,12 @@ public class ProductController {
 
     @GetMapping("/get_all_products")
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        //todo modify
-        return ResponseEntity.status(HttpStatus.OK).body(productService.findAllProducts()
-                .stream().map(ProductMapper::convertFromEntity).collect(Collectors.toList()));
+        return ResponseEntity.status(HttpStatus.OK).body(productService.findAllProducts());
+    }
+
+    @GetMapping("/get_product/{id}")
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable int id) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.findProductById(id));
     }
 
     @GetMapping("/get_all_product_categories")
@@ -50,6 +53,12 @@ public class ProductController {
     public ResponseEntity<Object> delete(@PathVariable("id") int id) {
         productService.deleteProduct(id);
         return new ResponseEntity<>("Product is deleted successsfully", HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/update_product")
+    public ResponseEntity<Object> updateProduct(@RequestBody CreateProductDTO createProductDTO) {
+        productService.updateProduct(createProductDTO);
+        return new ResponseEntity<>("Product is updated successfully", HttpStatus.OK);
     }
 
 }

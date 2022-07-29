@@ -61,4 +61,22 @@ public class Product extends BaseEntity{
         this.supplier = supplier;
         this.imageUrl = imageUrl;
     }
+
+    public Product(int id,
+                   String name,
+                   String description,
+                   BigDecimal price,
+                   Double weight,
+                   ProductCategory productCategory,
+                   Supplier supplier,
+                   String imageUrl) {
+        super(id);
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.weight = weight;
+        this.productCategory = productCategory;
+        this.supplier = supplier;
+        this.imageUrl = imageUrl;
+    }
 }
