@@ -1,11 +1,13 @@
-package ro.msg.learning.shop.service.mapper;
+package ro.msg.learning.shop.controller.mapper;
 
+import org.springframework.stereotype.Component;
 import ro.msg.learning.shop.dto.SupplierDTO;
 
 import ro.msg.learning.shop.model.Supplier;
 
+@Component
 public class SupplierMapper {
-    public static Supplier convertFromDTO(SupplierDTO supplierDTO) {
+    public Supplier convertFromDTO(SupplierDTO supplierDTO) {
         return Supplier.builder()
                 .id(supplierDTO.getId())
                 .name(supplierDTO.getName())
@@ -13,7 +15,7 @@ public class SupplierMapper {
 
     }
 
-    public static SupplierDTO convertFromEntity(Supplier supplier) {
+    public SupplierDTO convertFromEntity(Supplier supplier) {
         return SupplierDTO.builder()
                 .id(supplier.getId())
                 .name(supplier.getName())

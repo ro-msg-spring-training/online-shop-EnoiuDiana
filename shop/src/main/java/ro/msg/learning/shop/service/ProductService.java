@@ -11,7 +11,7 @@ import ro.msg.learning.shop.repository.ProductCategoryRepository;
 import ro.msg.learning.shop.repository.ProductRepository;
 import ro.msg.learning.shop.repository.SupplierRepository;
 import ro.msg.learning.shop.service.exceptions.NotFoundException;
-import ro.msg.learning.shop.service.mapper.ProductMapper;
+import ro.msg.learning.shop.controller.mapper.ProductMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,37 +31,33 @@ public class ProductService {
         this.supplierRepository = supplierRepository;
     }
 
-    public List<ProductDTO> findAllProducts() {
-        return productRepository.findAll().stream().map(ProductMapper::convertFromEntity).collect(Collectors.toList());
+    public List<Product> findAllProducts() {
+        return productRepository.findAll();
     }
 
-    public ProductDTO findProductById(int id) {
+    public Product findProductById(int id) {
         if(productRepository.existsById(id)) {
-            Product product = productRepository.getReferenceById(id);
-            return ProductMapper.convertFromEntity(product);
+            return productRepository.getReferenceById(id);
         }
         else throw new NotFoundException("product not found");
     }
 
-    public void createProduct(CreateProductDTO createProductDTO) {
-        if(productCategoryRepository.existsById(createProductDTO.getProductCategoryId()) &&
-        supplierRepository.existsById(createProductDTO.getSupplierId())) {
-            ProductCategory productCategory = productCategoryRepository.getReferenceById(createProductDTO.getProductCategoryId());
-            Supplier supplier = supplierRepository.getReferenceById(createProductDTO.getSupplierId());
-            Product newProduct = new Product(
-                    createProductDTO.getName(),
-                    createProductDTO.getDescription(),
-                    createProductDTO.getPrice(),
-                    createProductDTO.getWeight(),
-                    productCategory,
-                    supplier,
-                    createProductDTO.getImageUrl());
+    public void createProduct(Product product, int productCategoryId, int supplierId) {
+        saveProduct(product, productCategoryId, supplierId);
 
-            productRepository.save(newProduct);
+    }
+
+    private void saveProduct(Product product, int productCategoryId, int supplierId) {
+        if(productCategoryRepository.existsById(productCategoryId) &&
+        supplierRepository.existsById(supplierId)) {
+            ProductCategory productCategory = productCategoryRepository.getReferenceById(productCategoryId);
+            Supplier supplier = supplierRepository.getReferenceById(supplierId);
+            product.setProductCategory(productCategory);
+            product.setSupplier(supplier);
+            productRepository.save(product);
         } else {
             throw new NotFoundException("Product category or supplier not found");
         }
-
     }
 
     public void deleteProduct(int id) {
@@ -72,26 +68,9 @@ public class ProductService {
         }
     }
 
-    public void updateProduct(CreateProductDTO createProductDTO) {
-        if(productRepository.existsById(createProductDTO.getId())) {
-            if(productCategoryRepository.existsById(createProductDTO.getProductCategoryId()) &&
-                    supplierRepository.existsById(createProductDTO.getSupplierId())) {
-                ProductCategory productCategory = productCategoryRepository.getReferenceById(createProductDTO.getProductCategoryId());
-                Supplier supplier = supplierRepository.getReferenceById(createProductDTO.getSupplierId());
-                Product newProduct = new Product(
-                        createProductDTO.getId(),
-                        createProductDTO.getName(),
-                        createProductDTO.getDescription(),
-                        createProductDTO.getPrice(),
-                        createProductDTO.getWeight(),
-                        productCategory,
-                        supplier,
-                        createProductDTO.getImageUrl());
-
-                productRepository.save(newProduct);
-            } else {
-                throw new NotFoundException("Product category or supplier not found");
-            }
+    public void updateProduct(Product product, int productCategoryId, int supplierId) {
+        if(productRepository.existsById(product.getId())) {
+            saveProduct(product, productCategoryId, supplierId);
         } else {
             throw new NotFoundException("Product not found");
         }
