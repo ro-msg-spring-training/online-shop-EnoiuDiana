@@ -38,11 +38,6 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(productService.findProductById(id));
     }
 
-    @GetMapping("/get_all_product_categories")
-    public List<String> getAllProductCategories() {
-        return productCategoryService.findAllProductCategories().stream().map(ProductCategory::getDescription).collect(Collectors.toList());
-    }
-
     @PostMapping(value = "/create_product")
     public ResponseEntity<Object> createProduct(@RequestBody CreateProductDTO createProductDTO) {
         productService.createProduct(createProductDTO);
