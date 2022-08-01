@@ -1,0 +1,8 @@
+INSERT INTO LOCATION(NAME, ADDRESS_COUNTRY, ADDRESS_CITY, ADDRESS_COUNTY, ADDRESS_STREET)
+VALUES ( 'First location', 'Romania', 'CLuj-Napoca', 'CLuj', 'Str. Croitorilor');
+
+INSERT INTO LOCATION(NAME, ADDRESS_COUNTRY, ADDRESS_CITY, ADDRESS_COUNTY, ADDRESS_STREET)
+VALUES ( 'Second location', 'Romania', 'Bucuresti', 'Bucuresti', 'Str. Independentei');
+
+INSERT INTO LOCATION(NAME, ADDRESS_COUNTRY, ADDRESS_CITY, ADDRESS_COUNTY, ADDRESS_STREET)
+VALUES ( 'Third location', 'Romania', 'Iasi', 'Iasi', 'Str. Republicii');
