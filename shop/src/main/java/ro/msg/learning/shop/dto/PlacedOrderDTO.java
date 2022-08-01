@@ -19,6 +19,7 @@ import java.util.List;
 public class PlacedOrderDTO {
     private int id;
     private int customerID;
+    private int shippedFromId;
 
     @JsonSerialize(using= LocalDateTimeSerializer.class)
     private LocalDateTime createdAt;

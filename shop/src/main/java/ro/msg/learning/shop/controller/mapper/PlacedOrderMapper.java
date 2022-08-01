@@ -32,6 +32,7 @@ public class PlacedOrderMapper {
         return PlacedOrderDTO.builder()
                 .id(placedOrder.getId())
                 .customerID(placedOrder.getCustomer().getId())
+                .shippedFromId(placedOrder.getLocation().getId())
                 .createdAt(placedOrder.getCreatedAt())
                 .addressCountry(placedOrder.getAddress_country())
                 .addressCity(placedOrder.getAddress_city())
