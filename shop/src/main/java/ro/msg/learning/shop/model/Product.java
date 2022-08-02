@@ -79,4 +79,8 @@ public class Product extends BaseEntity{
         this.supplier = supplier;
         this.imageUrl = imageUrl;
     }
+
+    public Product(int id) {
+        super(id);
+    }
 }

@@ -1,6 +1,7 @@
 package ro.msg.learning.shop.service;
 
 import org.springframework.stereotype.Service;
+import ro.msg.learning.shop.dto.OrderDetailDTO;
 import ro.msg.learning.shop.model.*;
 import ro.msg.learning.shop.repository.*;
 import ro.msg.learning.shop.service.exceptions.NotFoundException;
@@ -36,11 +37,11 @@ public class OrderService {
         this.stockRepository = stockRepository;
     }
 
-    private Set<OrderDetail> findProductsForOrderDetail(PlacedOrder placeOrder, List<OrderDetailProductIdAndQuantity> productIdAndQuantityList) {
+    private Set<OrderDetail> findProductsForOrderDetail(PlacedOrder placeOrder, List<OrderDetail> productIdAndQuantityList) {
         Set<OrderDetail> orderDetails = new HashSet<>();
-        for (OrderDetailProductIdAndQuantity productIdAndQuantity : productIdAndQuantityList) {
-            if(productRepository.existsById(productIdAndQuantity.getProductId())) {
-                Product foundProduct = productRepository.getReferenceById(productIdAndQuantity.getProductId());
+        for (OrderDetail productIdAndQuantity : productIdAndQuantityList) {
+            if(productRepository.existsById(productIdAndQuantity.getProduct().getId())) {
+                Product foundProduct = productRepository.getReferenceById(productIdAndQuantity.getProduct().getId());
                 OrderDetail orderDetail = new OrderDetail(placeOrder, foundProduct, productIdAndQuantity.getQuantity());
                 orderDetails.add(orderDetail);
             } else {
@@ -50,17 +51,17 @@ public class OrderService {
         return orderDetails;
     }
 
-    private void modifyStocks(List<Stock> stocks, List<OrderDetailProductIdAndQuantity> productIdAndQuantityList) {
+    private void modifyStocks(List<Stock> stocks, List<OrderDetail> productIdAndQuantityList) {
         for(Stock stock : stocks) {
-            Optional<OrderDetailProductIdAndQuantity> foundProduct =
+            Optional<OrderDetail> foundProduct =
                     productIdAndQuantityList.stream()
-                            .filter(l-> l.getProductId() == stock.getProduct().getId()).findFirst();
+                            .filter(l-> l.getProduct().getId() == stock.getProduct().getId()).findFirst();
             foundProduct.ifPresent(orderDetailProductIdAndQuantity -> stock.setQuantity(stock.getQuantity() - orderDetailProductIdAndQuantity.getQuantity()));
             stockRepository.save(stock);
         }
     }
 
-    public PlacedOrder placeOrder(PlacedOrder placedOrder, int customerID, List<OrderDetailProductIdAndQuantity> productIdAndQuantityList) {
+    public PlacedOrder placeOrder(PlacedOrder placedOrder, int customerID, List<OrderDetail> productIdAndQuantityList) {
         if(customerRepository.existsById(customerID)) {
             Customer customer = customerRepository.getReferenceById(customerID);
             placedOrder.setCustomer(customer);

@@ -1,7 +1,7 @@
 package ro.msg.learning.shop.service.strategy;
 
 
-import ro.msg.learning.shop.model.OrderDetailProductIdAndQuantity;
+import ro.msg.learning.shop.model.OrderDetail;
 import ro.msg.learning.shop.model.Stock;
 import ro.msg.learning.shop.repository.StockRepository;
 import ro.msg.learning.shop.service.exceptions.NotFoundException;
@@ -17,10 +17,10 @@ public class MultipleLocationsStrategy implements LocationStrategy{
     }
 
     @Override
-    public List<Stock> getStockLocations(List<OrderDetailProductIdAndQuantity> productIdAndQuantityList) {
+    public List<Stock> getStockLocations(List<OrderDetail> productIdAndQuantityList) {
         List<Stock> stocks = new ArrayList<>();
-        for(OrderDetailProductIdAndQuantity productIdAndQuantity : productIdAndQuantityList) {
-            List<Stock> foundStocks = stockRepository.findAllByProductId(productIdAndQuantity.getProductId());
+        for(OrderDetail productIdAndQuantity : productIdAndQuantityList) {
+            List<Stock> foundStocks = stockRepository.findAllByProductId(productIdAndQuantity.getProduct().getId());
             if(foundStocks.isEmpty()) {
                 throw new NotFoundException("Not found product in stock");
             }

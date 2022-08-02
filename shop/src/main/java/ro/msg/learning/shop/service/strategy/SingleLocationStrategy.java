@@ -1,7 +1,7 @@
 package ro.msg.learning.shop.service.strategy;
 
 import ro.msg.learning.shop.model.Location;
-import ro.msg.learning.shop.model.OrderDetailProductIdAndQuantity;
+import ro.msg.learning.shop.model.OrderDetail;
 import ro.msg.learning.shop.model.Stock;
 import ro.msg.learning.shop.repository.LocationRepository;
 import ro.msg.learning.shop.repository.StockRepository;
@@ -21,15 +21,16 @@ public class SingleLocationStrategy implements LocationStrategy{
     }
 
     private boolean stockHasNeededProduct(Stock stock,
-                                          List<OrderDetailProductIdAndQuantity> productIdAndQuantityList ) {
+                                          List<OrderDetail> productIdAndQuantityList ) {
 
-        List<OrderDetailProductIdAndQuantity> found = productIdAndQuantityList.stream().filter(p -> stock.getProduct().getId() == p.getProductId() &&
-                stock.getQuantity() > p.getQuantity()).collect(Collectors.toList());
+        List<OrderDetail> found = productIdAndQuantityList.stream()
+                .filter(p -> stock.getProduct().getId() == p.getProduct().getId() &&
+                        stock.getQuantity() > p.getQuantity()).collect(Collectors.toList());
         return !found.isEmpty();
     }
 
     @Override
-    public List<Stock> getStockLocations(List<OrderDetailProductIdAndQuantity> productIdAndQuantityList) {
+    public List<Stock> getStockLocations(List<OrderDetail> productIdAndQuantityList) {
 
         List<Location> locations = locationRepository.findAll();
         for(Location location : locations) {
