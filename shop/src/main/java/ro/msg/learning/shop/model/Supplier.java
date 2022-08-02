@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +17,6 @@ import java.util.Set;
 @Setter
 @SuperBuilder
 public class Supplier extends BaseEntity{
-
     @Column(nullable = false)
     private String name;
 

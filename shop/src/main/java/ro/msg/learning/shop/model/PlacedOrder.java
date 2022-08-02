@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -20,7 +19,6 @@ import java.util.Set;
 @Setter
 @SuperBuilder
 public class PlacedOrder extends BaseEntity {
-
     @ManyToOne
     @JoinColumn(name = "shipped_from_id", nullable = false)
     private Location location;
@@ -47,5 +45,4 @@ public class PlacedOrder extends BaseEntity {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(mappedBy = "placedOrder", cascade = CascadeType.ALL)
     private Set<OrderDetail> orderDetails = new HashSet<>();
-
 }

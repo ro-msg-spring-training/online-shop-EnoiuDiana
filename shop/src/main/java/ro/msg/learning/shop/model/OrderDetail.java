@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
 import javax.persistence.*;
 
 @Entity
@@ -17,7 +16,6 @@ import javax.persistence.*;
 @Setter
 @SuperBuilder
 public class OrderDetail extends BaseEntity{
-
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "order_id", nullable = false)
@@ -29,9 +27,4 @@ public class OrderDetail extends BaseEntity{
 
     @Column(nullable = false)
     private int quantity;
-
-/*    public OrderDetail(Product foundProduct, int quantity) {
-        this.product = foundProduct;
-
-    }*/
 }

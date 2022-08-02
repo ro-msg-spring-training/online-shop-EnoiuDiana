@@ -7,12 +7,12 @@ import ro.msg.learning.shop.model.Supplier;
 
 @Component
 public class SupplierMapper {
+
     public Supplier convertFromDTO(SupplierDTO supplierDTO) {
         return Supplier.builder()
                 .id(supplierDTO.getId())
                 .name(supplierDTO.getName())
                 .build();
-
     }
 
     public SupplierDTO convertFromEntity(Supplier supplier) {

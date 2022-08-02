@@ -2,7 +2,6 @@ package ro.msg.learning.shop.model;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -16,7 +15,6 @@ import java.util.Set;
 @Setter
 @SuperBuilder
 public class Product extends BaseEntity{
-
     @Column(nullable = false)
     private String name;
 

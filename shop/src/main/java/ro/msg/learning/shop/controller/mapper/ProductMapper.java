@@ -1,22 +1,16 @@
 package ro.msg.learning.shop.controller.mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ro.msg.learning.shop.dto.CreateProductDTO;
 import ro.msg.learning.shop.dto.ProductDTO;
 import ro.msg.learning.shop.model.Product;
 
-
 @Component
+@RequiredArgsConstructor
 public class ProductMapper {
     private final ProductCategoryMapper productCategoryMapper;
     private final SupplierMapper supplierMapper;
-
-    @Autowired
-    public ProductMapper(ProductCategoryMapper productCategoryMapper, SupplierMapper supplierMapper) {
-        this.productCategoryMapper = productCategoryMapper;
-        this.supplierMapper = supplierMapper;
-    }
 
     public Product convertFromDTO(ProductDTO productDTO) {
         return Product.builder()
@@ -29,7 +23,6 @@ public class ProductMapper {
                 .productCategory(productCategoryMapper.convertFromDTO(productDTO.getProductCategory()))
                 .supplier(supplierMapper.convertFromDTO(productDTO.getSupplier()))
                 .build();
-
     }
 
     public ProductDTO convertFromEntity(Product product) {

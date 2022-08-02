@@ -1,7 +1,7 @@
 package ro.msg.learning.shop.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ro.msg.learning.shop.dto.OrderDetailDTO;
 import ro.msg.learning.shop.model.*;
 import ro.msg.learning.shop.repository.*;
 import ro.msg.learning.shop.service.exceptions.NotFoundException;
@@ -13,35 +13,43 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
-
     private final PlacedOrderRepository placedOrderRepository;
 
-    private final CustomerRepository customerRepository;
+    private final CustomerService customerService;
 
-    private final LocationRepository locationRepository;
+    private final LocationService locationService;
 
-    private final ProductRepository productRepository;
+    private final ProductService productService;
 
     private final LocationStrategy locationStrategy;
 
-    private final StockRepository stockRepository;
+    private final StockService stockService;
 
 
-    public OrderService(PlacedOrderRepository placedOrderRepository, CustomerRepository customerRepository, LocationRepository locationRepository, ProductRepository productRepository, LocationStrategy locationStrategy, StockRepository stockRepository) {
-        this.placedOrderRepository = placedOrderRepository;
-        this.customerRepository = customerRepository;
-        this.locationRepository = locationRepository;
-        this.productRepository = productRepository;
-        this.locationStrategy = locationStrategy;
-        this.stockRepository = stockRepository;
+    public PlacedOrder placeOrder(PlacedOrder placedOrder, int customerID, List<OrderDetail> productIdAndQuantityList) {
+        if(customerService.existsById(customerID)) {
+            Customer customer = customerService.findCustomerById(customerID);
+            placedOrder.setCustomer(customer);
+            Set<OrderDetail> orderDetails = findProductsForOrderDetail(placedOrder, productIdAndQuantityList);
+            placedOrder.setOrderDetails(orderDetails);
+            List<Stock> foundStocks = locationStrategy.getStockLocations(productIdAndQuantityList);
+            Location location = locationService.findLocationById(foundStocks.get(0).getLocation().getId());
+            placedOrder.setLocation(location);
+            modifyStocks(foundStocks, productIdAndQuantityList);
+            placedOrderRepository.save(placedOrder);
+            return placedOrder;
+        } else {
+            throw new NotFoundException("Customer does not exist");
+        }
     }
 
     private Set<OrderDetail> findProductsForOrderDetail(PlacedOrder placeOrder, List<OrderDetail> productIdAndQuantityList) {
         Set<OrderDetail> orderDetails = new HashSet<>();
         for (OrderDetail productIdAndQuantity : productIdAndQuantityList) {
-            if(productRepository.existsById(productIdAndQuantity.getProduct().getId())) {
-                Product foundProduct = productRepository.getReferenceById(productIdAndQuantity.getProduct().getId());
+            if(productService.existsById(productIdAndQuantity.getProduct().getId())) {
+                Product foundProduct = productService.findProductById(productIdAndQuantity.getProduct().getId());
                 OrderDetail orderDetail = new OrderDetail(placeOrder, foundProduct, productIdAndQuantity.getQuantity());
                 orderDetails.add(orderDetail);
             } else {
@@ -57,30 +65,7 @@ public class OrderService {
                     productIdAndQuantityList.stream()
                             .filter(l-> l.getProduct().getId() == stock.getProduct().getId()).findFirst();
             foundProduct.ifPresent(orderDetailProductIdAndQuantity -> stock.setQuantity(stock.getQuantity() - orderDetailProductIdAndQuantity.getQuantity()));
-            stockRepository.save(stock);
+            stockService.updateStock(stock);
         }
     }
-
-    public PlacedOrder placeOrder(PlacedOrder placedOrder, int customerID, List<OrderDetail> productIdAndQuantityList) {
-        if(customerRepository.existsById(customerID)) {
-            Customer customer = customerRepository.getReferenceById(customerID);
-            placedOrder.setCustomer(customer);
-            Set<OrderDetail> orderDetails = findProductsForOrderDetail(placedOrder, productIdAndQuantityList);
-            placedOrder.setOrderDetails(orderDetails);
-
-            //implement strategy location
-            List<Stock> foundStocks = locationStrategy.getStockLocations(productIdAndQuantityList);
-            Location location = locationRepository.getReferenceById(foundStocks.get(0).getLocation().getId());
-            placedOrder.setLocation(location);
-
-            //place order
-            modifyStocks(foundStocks, productIdAndQuantityList);
-            placedOrderRepository.save(placedOrder);
-            return placedOrder;
-        } else {
-            throw new NotFoundException("Customer does not exist");
-        }
-    }
-
-
 }

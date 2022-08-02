@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,7 +17,6 @@ import java.time.LocalDate;
 @Setter
 @SuperBuilder
 public class Revenue extends BaseEntity{
-
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;

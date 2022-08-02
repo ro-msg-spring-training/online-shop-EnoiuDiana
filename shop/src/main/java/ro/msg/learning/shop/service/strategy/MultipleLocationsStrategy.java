@@ -1,26 +1,22 @@
 package ro.msg.learning.shop.service.strategy;
 
-
+import lombok.RequiredArgsConstructor;
 import ro.msg.learning.shop.model.OrderDetail;
 import ro.msg.learning.shop.model.Stock;
-import ro.msg.learning.shop.repository.StockRepository;
+import ro.msg.learning.shop.service.StockService;
 import ro.msg.learning.shop.service.exceptions.NotFoundException;
 
 import java.util.*;
 
+@RequiredArgsConstructor
 public class MultipleLocationsStrategy implements LocationStrategy{
-
-    private final StockRepository stockRepository;
-
-    public MultipleLocationsStrategy(StockRepository stockRepository) {
-        this.stockRepository = stockRepository;
-    }
+    private final StockService stockService;
 
     @Override
     public List<Stock> getStockLocations(List<OrderDetail> productIdAndQuantityList) {
         List<Stock> stocks = new ArrayList<>();
         for(OrderDetail productIdAndQuantity : productIdAndQuantityList) {
-            List<Stock> foundStocks = stockRepository.findAllByProductId(productIdAndQuantity.getProduct().getId());
+            List<Stock> foundStocks = stockService.findAllStocksByProductId(productIdAndQuantity.getProduct().getId());
             if(foundStocks.isEmpty()) {
                 throw new NotFoundException("Not found product in stock");
             }

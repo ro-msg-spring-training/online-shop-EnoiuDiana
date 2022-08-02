@@ -1,6 +1,4 @@
 package ro.msg.learning.shop.controller.mapper;
-
-
 import org.springframework.stereotype.Component;
 import ro.msg.learning.shop.dto.OrderDetailDTO;
 import ro.msg.learning.shop.model.OrderDetail;
@@ -14,7 +12,6 @@ public class OrderDetailMapper {
                 .product(new Product(orderDetailDTO.getProductId()))
                 .quantity(orderDetailDTO.getQuantity())
                 .build();
-
     }
 
     public OrderDetailDTO convertFromEntity(OrderDetail orderDetail) {

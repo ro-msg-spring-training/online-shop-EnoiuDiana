@@ -6,13 +6,13 @@ import ro.msg.learning.shop.model.ProductCategory;
 
 @Component
 public class ProductCategoryMapper {
+
     public ProductCategory convertFromDTO(ProductCategoryDTO productCategoryDTO) {
         return ProductCategory.builder()
                 .id(productCategoryDTO.getId())
                 .name(productCategoryDTO.getName())
                 .description(productCategoryDTO.getDescription())
                 .build();
-
     }
 
     public ProductCategoryDTO convertFromEntity(ProductCategory productCategory) {
