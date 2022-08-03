@@ -1,8 +1,7 @@
 package ro.msg.learning.shop.config;
-import com.sun.istack.NotNull;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ro.msg.learning.shop.service.LocationService;
@@ -14,11 +13,6 @@ import ro.msg.learning.shop.service.strategy.SingleLocationStrategy;
 @Configuration
 @RequiredArgsConstructor
 public class StrategyConfig {
-
-    public enum StrategySelected {
-        SINGLE_LOCATION_STRATEGY,
-        MULTIPLE_LOCATIONS_STRATEGY
-    }
 
     private final StockService stockService;
 
