@@ -5,12 +5,10 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
-import ro.msg.learning.shop.repository.OrderDetailRepository;
 import ro.msg.learning.shop.service.LocationService;
 import ro.msg.learning.shop.service.StockService;
 import ro.msg.learning.shop.service.strategy.MultipleLocationsStrategy;
 import ro.msg.learning.shop.service.strategy.SingleLocationStrategy;
-
 
 @TestConfiguration
 @RequiredArgsConstructor

@@ -9,13 +9,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import ro.msg.learning.shop.configuration.StrategyUnitTestConfig;
 import ro.msg.learning.shop.model.*;
+import ro.msg.learning.shop.service.strategy.MultipleLocationsStrategy;
 import ro.msg.learning.shop.service.strategy.SingleLocationStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @Import(StrategyUnitTestConfig.class)
@@ -24,6 +24,10 @@ public class LocationStrategyIntegrationTest {
     @Autowired
     @Qualifier("singleLocationStrategy")
     private SingleLocationStrategy singleLocationStrategy;
+
+    @Autowired
+    @Qualifier("multipleLocationStrategy")
+    private MultipleLocationsStrategy multipleLocationsStrategy;
 
     private final List<OrderDetail> productIdAndQuantityList =  new ArrayList<>();
 
@@ -38,6 +42,14 @@ public class LocationStrategyIntegrationTest {
         List<Stock> stocks = singleLocationStrategy.getStockLocations(productIdAndQuantityList);
         assertThat(stocks).hasSize(2);
         assertThat(stocks.get(0).getLocation().getId()).isEqualTo(stocks.get(1).getLocation().getId());
+    }
+
+    @Test
+    void testGetStockForMultipleLocations() {
+        List<Stock> stocks = multipleLocationsStrategy.getStockLocations(productIdAndQuantityList);
+        assertThat(stocks).hasSize(2);
+        assertThat(stocks.get(0).getLocation().getId()).isEqualTo(1);
+        assertThat(stocks.get(1).getLocation().getId()).isEqualTo(2);
 
     }
 

@@ -22,7 +22,6 @@ public class SingleLocationStrategy implements LocationStrategy{
 
     @Override
     public List<Stock> getStockLocations(List<OrderDetail> productIdAndQuantityList) {
-
         List<Location> locations = locationService.findAllLocations();
         for(Location location : locations) {
             List<Stock> stocksByLocation = stockService.findAllStocksByLocationId(location.getId());
