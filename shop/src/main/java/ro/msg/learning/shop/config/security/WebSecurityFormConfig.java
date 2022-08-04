@@ -23,6 +23,7 @@ public class WebSecurityFormConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/product/**").authenticated()
                 .antMatchers("/order/**").authenticated()
+                .antMatchers("/login").permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/login")
