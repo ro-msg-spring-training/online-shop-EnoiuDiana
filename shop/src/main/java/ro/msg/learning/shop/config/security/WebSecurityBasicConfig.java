@@ -10,12 +10,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
 @Profile({"with-basic"})
 public class WebSecurityBasicConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private MyBasicAuthenticationEntryPoint authenticationEntryPoint;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -24,12 +28,12 @@ public class WebSecurityBasicConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/product/**").authenticated()
                 .antMatchers("/order/**").authenticated()
                 .and()
-                .httpBasic();
-                //.authenticationEntryPoint(authenticationEntryPoint);
+                .httpBasic()
+                .authenticationEntryPoint(authenticationEntryPoint);
 
-/*        http
+        http
                 .addFilterAfter(new CustomFilter(),
-                BasicAuthenticationFilter.class);*/
+                BasicAuthenticationFilter.class);
 
         http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     }

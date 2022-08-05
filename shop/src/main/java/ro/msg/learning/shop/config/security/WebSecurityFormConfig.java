@@ -21,9 +21,10 @@ public class WebSecurityFormConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/product/get_all_products").permitAll()
                 .antMatchers("/product/**").authenticated()
                 .antMatchers("/order/**").authenticated()
-                .antMatchers("/login").permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/login")
