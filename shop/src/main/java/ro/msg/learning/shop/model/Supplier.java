@@ -23,4 +23,8 @@ public class Supplier extends BaseEntity{
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
     private Set<Product> products = new HashSet<>();
 
+    public Supplier(String name) {
+        this.name = name;
+    }
+
 }

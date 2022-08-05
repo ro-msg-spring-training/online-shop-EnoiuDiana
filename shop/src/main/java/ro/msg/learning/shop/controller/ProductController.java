@@ -1,7 +1,12 @@
 package ro.msg.learning.shop.controller;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ro.msg.learning.shop.controller.mapper.ProductMapper;
 import ro.msg.learning.shop.dto.CreateProductDTO;
@@ -13,6 +18,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/product")
 @RequiredArgsConstructor
+@CrossOrigin
 public class ProductController {
     private final ProductService productService;
     private final ProductMapper productMapper;

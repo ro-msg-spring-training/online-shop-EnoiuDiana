@@ -42,4 +42,11 @@ public class Location extends BaseEntity{
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<Stock> stocks = new HashSet<>();
 
+    public Location(String locationName, String country, String city, String county, String street) {
+        this.name = locationName;
+        this.address_country = country;
+        this.address_city = city;
+        this.address_county = county;
+        this.address_street = street;
+    }
 }
